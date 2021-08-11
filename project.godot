@@ -16,7 +16,13 @@ _global_script_class_icons={
 [application]
 
 config/name="better-procedural-terrain"
+run/main_scene="res://Scenes/Main.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+ChunkProperties="*res://Scripts/Global/Properties/ChunkProperties.gd"
+CubeProperties="*res://Scripts/Global/Properties/CubeProperties.gd"
 
 [rendering]
 
