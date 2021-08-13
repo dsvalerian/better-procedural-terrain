@@ -1,7 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/World/Terrain/ChunkManager/ChunkManager.gd" type="Script" id=1]
-
+[ext_resource path="res://Scenes/World/Terrain/Chunk/ChunkManager.gd" type="Script" id=1]
 
 [node name="ChunkManager" type="Spatial"]
 script = ExtResource( 1 )

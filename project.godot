@@ -21,8 +21,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
-ChunkProperties="*res://Scripts/Global/Properties/ChunkProperties.gd"
-CubeProperties="*res://Scripts/Global/Properties/CubeProperties.gd"
+ChunkProperties="*res://Globals/Properties/ChunkProperties.gd"
+CubeProperties="*res://Globals/Properties/CubeProperties.gd"
 
 [rendering]
 

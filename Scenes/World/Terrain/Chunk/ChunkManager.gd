@@ -1,7 +1,7 @@
 extends Spatial
 tool
 
-const NoiseEngine = preload("res://Scripts/Common/NoiseEngine.gd")
+const NoiseEngine = preload("res://Common/Util/NoiseEngine.gd")
 const ChunkScene = preload("res://Scenes/World/Terrain/Chunk/Chunk.tscn")
 
 var noise_engine
@@ -13,6 +13,4 @@ func _init():
 	
 	chunk = ChunkScene.instance()
 	add_child(chunk)
-	chunk.init(Vector3(0.0, 0.0, 0.0))
-	chunk.update(noise)
 	

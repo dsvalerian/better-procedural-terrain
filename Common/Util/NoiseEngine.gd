@@ -1,5 +1,3 @@
-const Array2D = preload("res://Scripts/Common/Array2D.gd")
-
 var noise
 	
 func _init(p_seed, lacunarity, octaves, period, persistence):
@@ -11,9 +9,10 @@ func _init(p_seed, lacunarity, octaves, period, persistence):
 	noise.persistence = persistence
 
 func get_noise(size, x, y):
-	var noise_array = Array2D.new(size, size)
-	for i in size:
-		for j in size:
-			noise_array.set_value(i, j, noise.get_noise_2d(x + i, y + j))
+	pass
+	#var noise_array = Array2D.new(size, size)
+	#for i in size:
+	#	for j in size:
+	#		noise_array.set_value(i, j, noise.get_noise_2d(x + i, y + j))
 
-	return noise_array
+	#return noise_array

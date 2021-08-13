@@ -1,7 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://Scenes/Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Scenes/Player/MovementController/MovementController.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Entities/Player/Player.gd" type="Script" id=1]
+[ext_resource path="res://Entities/Player/MovementController/MovementController.tscn" type="PackedScene" id=2]
+
 
 [sub_resource type="CapsuleShape" id=1]
 height = 2.0
