@@ -83,11 +83,11 @@ func get_triangles(point_cloud : Array3D):
 # Interpolates between two voxels according to their densities and the density_threshold
 # Returns the interpolated position between those two voxels
 func interpolate_vertex(voxel_a : Dictionary, voxel_b : Dictionary):
-	if abs(density_threshold - voxel_a.density) < 0.000001:
+	if abs(density_threshold - voxel_a.density) < 0.0000001:
 		return Vector3(voxel_a.x, voxel_a.y, voxel_a.z)
-	if abs(density_threshold - voxel_b.density) < 0.000001:
+	if abs(density_threshold - voxel_b.density) < 0.0000001:
 		return Vector3(voxel_b.x, voxel_b.y, voxel_b.z)
-	if abs(voxel_a.density - voxel_b.density) < 0.000001:
+	if abs(voxel_a.density - voxel_b.density) < 0.0000001:
 		return Vector3(voxel_a.x, voxel_a.y, voxel_a.z)
 		
 	var mid_delta = (density_threshold - voxel_a.density) / (voxel_b.density - voxel_a.density)

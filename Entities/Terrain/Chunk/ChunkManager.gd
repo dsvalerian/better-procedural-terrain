@@ -21,9 +21,16 @@ func _ready():
 		ChunkProps.DIMENSION.y, 
 		ChunkProps.DIMENSION.z
 	)
+	
+	var chunk_count = Vector3(4, 2, 4)
+	var offset_pos = Vector3(
+		-(chunk_count.x * dimensions.x / 2), 
+		-(chunk_count.y * dimensions.y / 2), 
+		-(chunk_count.z * dimensions.z / 2)
+	)
 		
 	chunks = {}
-	create_chunks_starting_at(Vector3(0, 0, 0), dimensions, Vector3(3, 3, 3))
+	create_chunks_starting_at(offset_pos, dimensions, chunk_count)
 	
 func create_chunks_starting_at(position : Vector3, chunk_dimensions : Vector3, chunk_count : Vector3):
 	for x in chunk_count.x:
@@ -42,7 +49,7 @@ func create_chunk_at(position : Vector3, dimensions : Vector3):
 	
 	var chunk = ChunkScene.instance()
 	add_child(chunk)
-	chunk.init_scene(noise_engine, position, dimensions, ChunkProps.STEP_SIZE, ChunkProps.DENSITY_THRESHOLD)
+	chunk.init_scene(noise_engine, position, dimensions, ChunkProps.STEP_SIZE, ChunkProps.DENSITY_THRESHOLD, ChunkProps.AMPLITUDE)
 	chunk.create_point_cloud()
 	#chunk.render_point_cloud()
 	chunk.create_mesh()

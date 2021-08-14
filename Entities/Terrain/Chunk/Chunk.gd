@@ -12,16 +12,18 @@ var position
 var dimensions
 var step_size
 var density_threshold
+var amplitude
 
 var point_cloud
 var surface_mesh_instance
 
-func init_scene(p_noise_engine : NoiseEngine, p_position : Vector3, p_dimensions : Vector3, p_step_size : float, p_density_threshold : float):
+func init_scene(p_noise_engine : NoiseEngine, p_position : Vector3, p_dimensions : Vector3, p_step_size, p_density_threshold, p_amplitude):
 	set_position(p_position)
 	noise_engine = p_noise_engine
 	dimensions = p_dimensions
 	step_size = p_step_size
 	density_threshold = p_density_threshold
+	amplitude = p_amplitude
 	
 func set_position(p_position : Vector3):
 	position = p_position
@@ -31,9 +33,9 @@ func create_point_cloud():
 	var voxel_factory = VoxelFactory.new()
 	
 	point_cloud = Array3D.new(
-		int((dimensions.x + 1) / step_size),
-		int((dimensions.y + 1) / step_size),
-		int((dimensions.z + 1) / step_size)
+		int((dimensions.x + step_size) / step_size),
+		int((dimensions.y + step_size) / step_size),
+		int((dimensions.z + step_size) / step_size)
 	)
 	
 	# Filling the point cloud with voxel data
@@ -47,7 +49,11 @@ func create_point_cloud():
 					z * step_size
 				)
 				
-				voxel.density = noise_engine.get_noise(voxel.x + position.x, voxel.y + position.y, voxel.z + position.z)
+				voxel.density = noise_engine.get_noise(
+					voxel.x + position.x, 
+					voxel.y + position.y, 
+					voxel.z + position.z
+				) - (voxel.y + position.y) / amplitude
 				
 				# Storing the voxel in the array
 				point_cloud.set_value(x, y, z, voxel)
