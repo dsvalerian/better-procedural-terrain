@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://Scenes/World/Terrain/Chunk/ChunkManager.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Entities/Terrain/Chunk/ChunkManager.tscn" type="PackedScene" id=1]
+
 
 [node name="World" type="Spatial"]
 
