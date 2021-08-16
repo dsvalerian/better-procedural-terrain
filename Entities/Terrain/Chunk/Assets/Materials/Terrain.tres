@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[ext_resource path="res://Entities/Terrain/Chunk/Assets/Shaders/Terrain.shader" type="Shader" id=1]
+[ext_resource path="res://Entities/Terrain/Chunk/Assets/Textures/grass_128.png" type="Texture" id=2]
+[ext_resource path="res://Entities/Terrain/Chunk/Assets/Textures/stone_128.png" type="Texture" id=3]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/tile_amount = 1
+shader_param/grass_texture = ExtResource( 2 )
+shader_param/stone_texture = ExtResource( 3 )

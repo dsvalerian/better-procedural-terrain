@@ -9,7 +9,6 @@ func _init(p_density_threshold : float):
 # Gets an array of triangle coordinates, where each triangle is an array of Vector3s, where each
 # Vector3 is a vertex. These triangles are creates using voxel data and a density_threshold value.
 func get_triangles(point_cloud : Array3D):
-	var voxel_factory = VoxelFactory.new()
 	var triangles = []
 	
 	# Step through point cloud
@@ -37,7 +36,7 @@ func get_triangles(point_cloud : Array3D):
 				# Lookup the edge table to determine which edges have a threshold vertex on them
 				# and add the vertices along the edges that makes up the triangles
 				var cube_verts = []
-				for i in range(12):
+				for _i in range(12):	# added underscore to prevent Godot errors
 					cube_verts.append(null)
 				
 				if ChunkProps.EDGE_TABLE[cube_index] & ChunkProps.CUBE_INDEX_TABLE[0]:

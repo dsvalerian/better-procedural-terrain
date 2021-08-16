@@ -1,7 +1,25 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://Scenes/World/World.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Environment" id=1]
+background_mode = 1
+background_color = Color( 0.313726, 0.313726, 0.313726, 1 )
+background_energy = 1.93
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_energy = 0.39
+ambient_light_sky_contribution = 0.0
+tonemap_mode = 2
+tonemap_exposure = 0.65
+tonemap_white = 0.65
 
 [node name="Main" type="Node"]
 
 [node name="World" parent="." instance=ExtResource( 2 )]
+
+[node name="DirectionalLight" type="DirectionalLight" parent="World"]
+transform = Transform( 0.293642, 0.75271, 0.589239, -0.90062, 0.0112369, 0.434462, 0.320402, -0.658257, 0.681205, 0, 35.2094, 15.8448 )
+light_specular = 0.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource( 1 )

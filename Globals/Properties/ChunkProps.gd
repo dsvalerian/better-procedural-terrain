@@ -1,8 +1,8 @@
 extends Node
 
 # Mesh properties
-const DIMENSION = Vector3(32.0, 32.0, 32.0) # Each dimension should be divisible by STEP_SIZE
-const STEP_SIZE = 4.0
+const DIMENSION = Vector3(64.0, 32.0, 64.0) # Each dimension should be divisible by STEP_SIZE
+const STEP_SIZE = 16.0
 const DENSITY_THRESHOLD = 0.0
 const AMPLITUDE = 64.0
 

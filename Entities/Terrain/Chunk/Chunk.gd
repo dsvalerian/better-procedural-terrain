@@ -4,8 +4,10 @@ tool
 const Array3D = preload("res://Common/Data/Array3D.gd")
 const VoxelFactory = preload("res://Common/Data/VoxelFactory.gd")
 const NoiseEngine = preload("res://Common/Util/NoiseEngine.gd")
-const DebugPointCloudShader = preload("DebugPointCloud.shader")
 const MarchingCubes = preload("MarchingCubes.gd")
+const DebugPointCloudShader = preload("Assets/Shaders/DebugPointCloud.shader")
+const TerrainShader = preload("Assets/Shaders/Terrain.shader")
+const TerrainMaterial = preload("Assets/Materials/Terrain.tres")
 
 var noise_engine
 var position
@@ -64,7 +66,7 @@ func render_point_cloud():
 	spatial_material.shader = DebugPointCloudShader
 	var surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_POINTS)
-	surface_tool.set_material(spatial_material)
+	surface_tool.set_material(TerrainMaterial)
 	
 	# Step through point cloud to add vertices 
 	for x in point_cloud.x:
@@ -86,10 +88,10 @@ func create_mesh():
 		surface_mesh_instance = null
 		
 	# Set up surface tool and material
-	var spatial_material = SpatialMaterial.new()
 	var surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	surface_tool.set_material(spatial_material)
+	surface_tool.set_material(TerrainMaterial)
+	surface_tool.add_smooth_group(true)
 	
 	# Generate triangles using marching cubes
 	var marching_cubes = MarchingCubes.new(density_threshold)
@@ -98,7 +100,10 @@ func create_mesh():
 	# Step through triangles to generate mesh
 	for i in triangles.size():
 		for j in triangles[i].size():
+			var uv_coord = Vector2(triangles[i][j].x / dimensions.x, triangles[i][j].z / dimensions.z)
+			surface_tool.add_uv(uv_coord)
 			surface_tool.add_vertex(triangles[i][j])
+			#print(triangles[i][j])
 			
 	# Commit vertices to mesh and add to scene
 	surface_tool.generate_normals()
