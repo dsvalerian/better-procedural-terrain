@@ -18,8 +18,8 @@ The previous terrain generation tool included a shader that colored each vertex 
 
 # How to Use
 - Pull the project and import it into Godot. 
-- You should be able to already see some generated terrain. If not, make sure you've opened Scenes/Main.tscn and run Scenes -> Reload Saved Scene.
-- You can mess with the terrain properties in "Globals/Properties/ChunkProps.gd". You can replace terrain texture by importing your texture files and adding them to the terrain material which is located at "Entities/Terrain/Chunk/Assets/Materials/Terrain.tres".
+- You should be able to already see some generated terrain. If not, make sure you've opened Scenes/Main.tscn and run **Scenes -> Reload Saved Scene**.
+- You can mess with the terrain properties in *Globals/Properties/ChunkProps.gd*. You can replace terrain texture by importing your texture files and adding them to the terrain material which is located at *Entities/Terrain/Chunk/Assets/Materials/Terrain.tres*.
 
 # References
 - Godot Engine -- https://godotengine.org/
