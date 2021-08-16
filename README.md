@@ -1,4 +1,4 @@
-# better-procedural-terrain
+# Better Procedural Terrain
 A voxel-based procedural terrain generation tool made in Godot (3.2).
 
 # Overview
