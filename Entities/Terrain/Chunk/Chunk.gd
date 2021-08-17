@@ -4,10 +4,14 @@ tool
 const Array3D = preload("res://Common/Data/Array3D.gd")
 const VoxelFactory = preload("res://Common/Data/VoxelFactory.gd")
 const NoiseEngine = preload("res://Common/Util/NoiseEngine.gd")
+const VectorUtil = preload("res://Common/Util/VectorUtil.gd")
 const MarchingCubes = preload("MarchingCubes.gd")
 const DebugPointCloudShader = preload("Assets/Shaders/DebugPointCloud.shader")
+const DebugEdgeVertexShader = preload("Assets/Shaders/DebugEdgeVertex.shader")
 const TerrainShader = preload("Assets/Shaders/Terrain.shader")
 const TerrainMaterial = preload("Assets/Materials/Terrain.tres")
+
+const FLOAT_THRESHOLD = 0.00001
 
 var noise_engine
 var position
@@ -18,6 +22,8 @@ var amplitude
 
 var point_cloud
 var surface_mesh_instance
+var mesh_triangles
+var mesh_edge_triangles
 
 func init_scene(p_noise_engine : NoiseEngine, p_position : Vector3, p_dimensions : Vector3, p_step_size, p_density_threshold, p_amplitude):
 	set_position(p_position)
@@ -26,6 +32,9 @@ func init_scene(p_noise_engine : NoiseEngine, p_position : Vector3, p_dimensions
 	step_size = p_step_size
 	density_threshold = p_density_threshold
 	amplitude = p_amplitude
+	
+	mesh_triangles = {}
+	mesh_edge_triangles = {}
 	
 func set_position(p_position : Vector3):
 	position = p_position
@@ -66,7 +75,7 @@ func render_point_cloud():
 	spatial_material.shader = DebugPointCloudShader
 	var surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_POINTS)
-	surface_tool.set_material(TerrainMaterial)
+	surface_tool.set_material(spatial_material)
 	
 	# Step through point cloud to add vertices 
 	for x in point_cloud.x:
@@ -81,7 +90,7 @@ func render_point_cloud():
 	mesh_instance.set_mesh(surface_tool.commit())
 	add_child(mesh_instance)
 	
-func create_mesh():
+func create_initial_mesh():
 	# Unload mesh if it exists
 	if surface_mesh_instance != null:
 		surface_mesh_instance.queue_free()
@@ -98,15 +107,62 @@ func create_mesh():
 	var triangles = marching_cubes.get_triangles(point_cloud)
 	
 	# Step through triangles to generate mesh
-	for i in triangles.size():
-		for j in triangles[i].size():
-			var uv_coord = Vector2(triangles[i][j].x / dimensions.x, triangles[i][j].z / dimensions.z)
+	for triangle in triangles:
+		for vertex in triangle:
+			if is_edge_vertex(vertex):
+				# If vertex is already in the dict, add the triangle to the existing list
+				if mesh_edge_triangles.has(VectorUtil.vector_hash(vertex)):
+					mesh_edge_triangles[VectorUtil.vector_hash(vertex)].append(triangle)
+				# Otherwise, create a new list with the triangle as the only element for this vertex
+				else:
+					mesh_edge_triangles[VectorUtil.vector_hash(vertex)] = [triangle]
+			
+			var uv_coord = Vector2(vertex.x / dimensions.x, vertex.z / dimensions.z)
 			surface_tool.add_uv(uv_coord)
-			surface_tool.add_vertex(triangles[i][j])
-			#print(triangles[i][j])
+			surface_tool.add_vertex(vertex)
 			
 	# Commit vertices to mesh and add to scene
 	surface_tool.generate_normals()
 	surface_mesh_instance = MeshInstance.new()
 	surface_mesh_instance.set_mesh(surface_tool.commit())
 	add_child(surface_mesh_instance)
+	
+func render_edge_vertices():
+	#print("Rendering edge vertices", mesh_edge_triangles.size())
+	# Set up surface tool and material/shader
+	var spatial_material = ShaderMaterial.new()
+	spatial_material.shader = DebugEdgeVertexShader
+	var surface_tool = SurfaceTool.new()
+	surface_tool.begin(Mesh.PRIMITIVE_POINTS)
+	surface_tool.set_material(spatial_material)
+	
+	for vertex_hash in mesh_edge_triangles.keys():
+		surface_tool.add_vertex(VectorUtil.vector_unhash(vertex_hash))
+
+	# Commit vertices to mesh and add to scene
+	var mesh_instance = MeshInstance.new()
+	mesh_instance.set_mesh(surface_tool.commit())
+	add_child(mesh_instance)
+
+# Checks to see if a vertex is on the edge of the bounding box.
+func is_edge_vertex(vertex : Vector3):
+	var offset_x = position.x
+	var offset_y = position.y
+	var offset_z = position.z
+	
+	var min_x = position.x - offset_x
+	var min_y = position.y - offset_y
+	var min_z = position.z - offset_z
+	var max_x = position.x + dimensions.x - offset_x
+	var max_y = position.y + dimensions.y - offset_y
+	var max_z = position.z + dimensions.z - offset_z
+	
+	if abs(vertex.x - min_x) < ChunkProps.FLOAT_THRESHOLD or \
+	   abs(vertex.x - max_x) < ChunkProps.FLOAT_THRESHOLD or \
+	   abs(vertex.y - min_y) < ChunkProps.FLOAT_THRESHOLD or \
+	   abs(vertex.y - max_y) < ChunkProps.FLOAT_THRESHOLD or \
+	   abs(vertex.z - min_z) < ChunkProps.FLOAT_THRESHOLD or \
+	   abs(vertex.z - max_z) < ChunkProps.FLOAT_THRESHOLD:
+		return true
+		
+	return false

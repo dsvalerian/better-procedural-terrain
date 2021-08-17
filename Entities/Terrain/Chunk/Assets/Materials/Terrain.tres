@@ -6,6 +6,6 @@
 
 [resource]
 shader = ExtResource( 1 )
-shader_param/tile_amount = 1
+shader_param/tile_amount = 2
 shader_param/grass_texture = ExtResource( 2 )
 shader_param/stone_texture = ExtResource( 3 )
